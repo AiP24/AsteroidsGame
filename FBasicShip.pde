@@ -1,7 +1,6 @@
 import java.util.List;
-import java.util.Collections;
 class BasicShip extends Sprite {
-    public BasicShip(int xCenter, int yCenter, int w, int h, double[] rXHitbox, double[] rYHitbox, int[] spriteColor) {
+    public BasicShip(int xCenter, int yCenter, int w, int h, float[] rXHitbox, float[] rYHitbox, int[] spriteColor) {
         if (spriteColor.length != 3) {
             throw new IllegalArgumentException("spriteColor requires an array of length 3");
         }
@@ -26,9 +25,31 @@ class BasicShip extends Sprite {
       xVelocity = 0;
       yVelocity = 0;
     }
-
-    public void shoot() {
-        //TODO: write me
+    
+    public void xStrafe(double amount) {
+      xVelocity += amount;
+    } 
+    public void yStrafe(double amount) {
+      yVelocity += amount;
+    } 
+    
+    private Object arrayMax(List l) {
+      Object max = null;
+      for (int i = 0; i < l.size(); i++) {
+        if (max == null || (double)max < (double)l.get(i)) {
+          max = l.get(i);
+        }
+      }
+      return max;
+    }
+    private Object arrayMin(List l) {
+      Object min = null;
+      for (int i = 0; i < l.size(); i++) {
+        if (min == null || (double)min > (double)l.get(i)) {
+          min = l.get(i);
+        }
+      }
+      return min;
     }
 
     public boolean detectCollision(Sprite cmpSprite, boolean graze) {
@@ -57,24 +78,23 @@ class BasicShip extends Sprite {
           //fill(0, 255, 0, 50);
           //ellipse((float)(double)realXVertexes.get(v), (float)(double)realYVertexes.get(v), 10, 10);
         }
-        double minX = Collections.min(realXVertexes);
-        double minY = Collections.min(realYVertexes);
-        double maxX = Collections.max(realXVertexes);
-        double maxY = Collections.max(realYVertexes);
+        double minX = (double)arrayMin(realXVertexes)-((boundingBox[2]-boundingBox[0])*.2);
+        double minY = (double)arrayMin(realYVertexes)-((boundingBox[3]-boundingBox[1])*.2);
+        double maxX = (double)arrayMax(realXVertexes)+((boundingBox[2]-boundingBox[0])*.2);
+        double maxY = (double)arrayMax(realYVertexes)+((boundingBox[3]-boundingBox[1])*.2);
         double cmpX = cmpSprite.boundingBox[0]+cmpSprite.xCenter;
         double cmpY = cmpSprite.boundingBox[1]+cmpSprite.yCenter;
         double cmpH = cmpSprite.boundingBox[2]-cmpSprite.boundingBox[0];
         double cmpW = cmpSprite.boundingBox[3]-cmpSprite.boundingBox[1];
         //System.out.println(minX + " " + minY + " " + maxX + " " + maxY);
-        //fill(0, 255, 0, 50);
-        //rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
+        fill(0, 255, 0, 50);
+        rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
         if (
           minX < cmpX + cmpW &&
           cmpX < maxX &&
           minY < cmpY + cmpH &&
           cmpY < maxY
           ) {
-            
             //complex collision testing
             for (int v = 0; v < realXVertexes.size(); v++) {
               double realX = realXVertexes.get(v);
