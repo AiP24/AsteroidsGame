@@ -1,7 +1,7 @@
 Scene scene;
 public void setup() {
     size(500, 500);
-    scene = new Game();
+    scene = new MainMenu();
     scene.setup();
 }
 

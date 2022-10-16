@@ -18,11 +18,11 @@ class BasicAsteroid extends Sprite{
           double randY = Math.sin(TWO_PI/(double)vertexCount*v) + (Math.random()*.3-.15);
           xHitbox[v] = (int) Math.round((w/2.0)*randX);
           yHitbox[v] = (int) Math.round((h/2.0)*randY);
-          System.out.println(xHitbox[v]);
-          System.out.println(yHitbox[v]);
+          //System.out.println(xHitbox[v]);
+          //System.out.println(yHitbox[v]);
       }
-      this.boundingBox = new int[]{-(w/2), -(h/2), w/2, h/2};
-      System.out.println(this.boundingBox);
+      this.boundingBox = new int[]{-(w/2-w/15), -(h/2-h/15), w/2-w/15, h/2-h/15};
+      //System.out.println(this.boundingBox);
   }
   public void move() {
     turn(rotationVelocity);
@@ -32,14 +32,15 @@ class BasicAsteroid extends Sprite{
         pushMatrix();
         translate((float) xCenter, (float) yCenter);
         fill(0, 255, 0, 50);
-        rect(boundingBox[0], boundingBox[1], boundingBox[2]*2, boundingBox[3]*2);
+        //rect(boundingBox[0], boundingBox[1], boundingBox[2]*2, boundingBox[3]*2);
         rotate(radians((float)direction));
-        fill(spriteColor[0], spriteColor[1], spriteColor[2]);
+        fill(0, 0, 0, 0);
         stroke(spriteColor[0], spriteColor[1], spriteColor[2]);
         beginShape(POLYGON);
         for (int v = 0; v < xHitbox.length; v++) {
             vertex(xHitbox[v], yHitbox[v]);
         }
+        vertex(xHitbox[0], yHitbox[0]);
         endShape();
         
     popMatrix();

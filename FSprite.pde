@@ -20,6 +20,9 @@ class Sprite {
     public void turn(double rotationAmount) {
         direction += rotationAmount;
         direction = direction % 360.0;
+        if (direction < 0) {
+          direction = direction+360;
+        }
     }
 
     public void move() {
@@ -44,7 +47,7 @@ class Sprite {
 
     public void render() {
         pushMatrix();
-        fill(spriteColor[0], spriteColor[1], spriteColor[2]);
+        fill(0, 0, 0, 0);
         stroke(spriteColor[0], spriteColor[1], spriteColor[2]);
         translate((float) xCenter, (float) yCenter);
         rotate(radians((float)direction));
@@ -52,6 +55,7 @@ class Sprite {
         for (int v = 0; v < xHitbox.length; v++) {
             vertex(xHitbox[v], yHitbox[v]);
         }
+        vertex(xHitbox[0], yHitbox[0]);
         endShape();
         popMatrix();
 
