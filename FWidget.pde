@@ -1,9 +1,9 @@
 abstract class Widget {
-  int[] boundingBox;
-  int xCenter;
-  int yCenter;
-  int w;
-  int h;
+  public int[] boundingBox;
+  public int xCenter;
+  public int yCenter;
+  public int w;
+  public int h;
   public boolean isClicked(int x, int y) {
     return boundingBox[0] <= x && x <= boundingBox[2] && boundingBox[1] <= y && y <= boundingBox[3];  
   }
@@ -11,9 +11,9 @@ abstract class Widget {
 }
 
 class Button extends Widget {
-  String text_;
-  int[] textColor;
-  int[] hoverColor;
+  protected String text_;
+  protected int[] textColor;
+  protected int[] hoverColor;
   public Button(int xCenter, int yCenter, int h, String text_, int[] textColor) {
     textSize(h*.75);
     int w = (int) (textWidth(text_)*1.2);

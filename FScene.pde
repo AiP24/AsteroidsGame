@@ -7,7 +7,7 @@ abstract class Scene {
 }
 
 class MainMenu extends Scene {
-    String[] titleList = new String[]{
+    private String[] titleList = new String[]{
       "Highly Responsive to Asteroids",
       "Story of Asteroid Wonderland",
       "Phantasmagoria of Ast. Eroid",
@@ -39,8 +39,8 @@ class MainMenu extends Scene {
       "Asteroid Gouyoku Ibun",
       "Unconnected Asteroids"
     };
-  String title;
-  Button startButton;
+  private String title;
+  private Button startButton;
   public MainMenu() {
   }
   public void setup() {
@@ -59,6 +59,10 @@ class MainMenu extends Scene {
     
   }
   public void keyEvent(int keyValue, boolean pressed) {
+    if (keyValue == ENTER || keyValue == RETURN && !pressed) {
+      //System.out.println("sg");
+      changeScene = new Game();
+    }
   }
   public void mouseEvent(int x, int y, boolean pressed) {
     if (!pressed && startButton.isClicked(x, y)) {
@@ -68,34 +72,35 @@ class MainMenu extends Scene {
   }
 }
 class Game extends Scene {
-  boolean up = false;
-  boolean down = false;
-  boolean left = false;
-  boolean right = false;
-  boolean shoot = false;
-  boolean shift = false;
-  boolean died = false;
-  boolean enter = false;
-  ArrayList<BasicBullet> bulletList = new ArrayList<BasicBullet>();
-  BasicShip ship;
-  BasicShip enem;
-  BasicAsteroid ast;
-  Button restartButton;
-  Button mainMenuButton;
-  public Game() {
-  }
+  private boolean up = false;
+  private boolean down = false;
+  private boolean left = false;
+  private boolean right = false;
+  private boolean shoot = false;
+  private boolean shift = false;
+  private boolean died = false;
+  private boolean enter = false;
+  private ArrayList<BasicBullet> bulletList = new ArrayList<BasicBullet>();
+  private BasicShip ship;
+  //private BasicShip enem;
+  private Enemy enem;
+  private BasicAsteroid ast;
+  private Button restartButton;
+  private Button mainMenuButton;
+  private Timer timer;
+  public Game() {}//most setup code in setup
   public void setup() {
     float[] s1x = {1f, -.5f, -1f, -.5f};
     float[] s1y = {0f, -.5f, 0f, .5f};
     int[] s1c = {255, 100, 100};
-    ship = new BasicShip(250, 400, 50, 50, s1x, s1y, s1c);
-    //enem = new BasicShip(250, 250, 50, 50, new float[]{0f, 1f, -1f}, new float[]{-1f, 1f, 1f}, new int[]{150, 239, 255});
+    ship = new BasicShip(250, 400, 50, 50, s1x, s1y, s1c, 0);
+    enem = new Enemy(250, 200, 50, 50, new float[]{0f, 1f, -1f}, new float[]{-1f, 1f, 1f}, new int[]{150, 239, 255}, 500);
     ast = new HomingAsteroid(250, 250, 50, 50, new int[] {255, 255, 255}, 1, ship);
     ast.turn(45);
     ast.accelerate(Math.sqrt(2));
+    timer = new Timer();
     restartButton = new Button(width/2, height/2, height/15, "Restart (Enter)", new int[]{255, 255, 255}, new int[]{90, 215, 255});
     mainMenuButton = new Button(width/2, (int)(height*.75), height/15, "Main Menu", new int[]{255, 255, 255}, new int[]{90, 215, 255});
-
   }
   public void draw() {
     /* data processing */
@@ -118,8 +123,21 @@ class Game extends Scene {
       } else if (right) {
         ship.turn(5);
       }
+      if (shoot && timer.timerDone("shotCooldown")) {
+        double[] sc = ship.getCannon();
+        BasicBullet b = new BasicBullet((int)(sc[0]), (int)(sc[1]), 50, 2, new float[]{-1, -1, 1, 1, -1}, new float[]{-1,1,1,-1, -1}, new int[]{250,255,255}, ship.direction, 10);
+        b.accelerate(15);
+        bulletList.add(b);
+        BasicBullet c = new BasicBullet((int)(sc[0]), (int)sc[1], 50, 2, new float[]{-1, -1, 1, 1, -1}, new float[]{-1,1,1,-1, -1}, new int[]{250,255,255}, ship.direction-5, 10);
+        c.accelerate(15);
+        bulletList.add(c);
+        BasicBullet d = new BasicBullet((int)(sc[0]), (int)sc[1], 50, 2, new float[]{-1, -1, 1, 1, -1}, new float[]{-1,1,1,-1, -1}, new int[]{250,255,255}, ship.direction+5, 10);
+        d.accelerate(15);
+        bulletList.add(d);
+        timer.addTimer("shotCooldown", 300);
+      }
       ship.move();
-      ast.move();
+      //ast.move();
       if (ship.detectCollision(ast, true) && !ship.detectCollision(ast, false)) {
         ship.setColor(255, 255, 0);
       } else if (ship.detectCollision(ast, false)) {
@@ -131,10 +149,11 @@ class Game extends Scene {
       }
       for (int i = 0; i < bulletList.size(); i++) {
         bulletList.get(i).move();
-        if (bulletList.get(i).detectCollision(ast)) {
-          ast = new HomingAsteroid(250, 250, 50, 50, new int[] {255, 255, 255}, 1, ship);
-          ast.turn(45);
-          ast.accelerate(Math.sqrt(2));
+        if (bulletList.get(i).detectCollision(enem)) {
+          enem.damage(bulletList.get(i).dmg);
+          if (enem.hitpoints <= 0) {
+            System.out.println("ded");
+          }
           bulletList.remove(i);
           i--;//fix indexing
         }
@@ -150,12 +169,14 @@ class Game extends Scene {
       }
     }
     /* rendering */
+    strokeWeight(2);
     background(10, 0, 25);
     ast.render();
-    ship.render();
+    enem.render();
     for (int i = 0; i < bulletList.size(); i++) {
         bulletList.get(i).render();
     }
+    ship.render();
     if (died) {
       fill(255, 0, 0, 50);
       noStroke();
@@ -201,20 +222,15 @@ class Game extends Scene {
         break;
       case ' ':
         shoot = pressed;
-        if (!shoot && !died) {
-          BasicBullet b = new BasicBullet((int)ship.xCenter, (int)ship.yCenter, 50, 2, new float[]{-1, -1, 1, 1, -1}, new float[]{-1,1,1,-1, -1}, new int[]{250,255,255}, ship.direction);
-          b.accelerate(15);
-          bulletList.add(b);
-        }
         break;
     }
   }
   public void mouseEvent(int x, int y, boolean pressed) {
-    if (!pressed && restartButton.isClicked(x, y)) {
+    if (!pressed && died && restartButton.isClicked(x, y)) {
       //System.out.println("re");
       changeScene = new Game();
     }
-    if (!pressed && mainMenuButton.isClicked(x, y)) {
+    if (!pressed && died && mainMenuButton.isClicked(x, y)) {
       //System.out.println("mm");
       changeScene = new MainMenu();
     }

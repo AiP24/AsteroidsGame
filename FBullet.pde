@@ -1,5 +1,6 @@
 class BasicBullet extends Sprite {
-  public BasicBullet(int xCenter, int yCenter, int w, int h, float[] rXHitbox, float[] rYHitbox, int[] spriteColor, double direction) {
+  double dmg;
+  public BasicBullet(int xCenter, int yCenter, int w, int h, float[] rXHitbox, float[] rYHitbox, int[] spriteColor, double direction, double dmg) {
         if (spriteColor.length != 3) {
             throw new IllegalArgumentException("spriteColor requires an array of length 3");
         }
@@ -14,6 +15,7 @@ class BasicBullet extends Sprite {
             yHitbox[v] = (int) Math.round((h/2.0)*rYHitbox[v]);
         }
         this.boundingBox = new int[]{-(w/2), -(h/2), w/2, h/2};
+        this.dmg = dmg;
     }
   public void move() {
     xCenter += xVelocity;    

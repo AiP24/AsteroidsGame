@@ -1,6 +1,7 @@
 import java.util.List;
 class BasicShip extends Sprite {
-    public BasicShip(int xCenter, int yCenter, int w, int h, float[] rXHitbox, float[] rYHitbox, int[] spriteColor) {
+  int cannonId;
+    public BasicShip(int xCenter, int yCenter, int w, int h, float[] rXHitbox, float[] rYHitbox, int[] spriteColor, int cannonId) {
         if (spriteColor.length != 3) {
             throw new IllegalArgumentException("spriteColor requires an array of length 3");
         }
@@ -15,6 +16,7 @@ class BasicShip extends Sprite {
             yHitbox[v] = (int) Math.round((h/2.0)*rYHitbox[v]);
         }
         this.boundingBox = new int[]{-(w/2), -(h/2), w/2, h/2};
+        this.cannonId = cannonId;
     }
     
     public void setColor(int r, int g, int b) {
@@ -50,6 +52,29 @@ class BasicShip extends Sprite {
         }
       }
       return min;
+    }
+    
+    public double[] getCannon() {
+      double dist = Math.sqrt(Math.pow(xHitbox[cannonId], 2)+Math.pow(yHitbox[cannonId], 2));
+      double angle;
+      try {
+        angle = direction+degrees((float)Math.atan((double)(yHitbox[cannonId])/(double)(xHitbox[cannonId])));
+      } catch (ArithmeticException e) {
+        angle = direction+90;
+      }
+      if (xHitbox[cannonId] < 0 && yHitbox[cannonId] >= 0) {
+        angle += 180;
+      } else if (xHitbox[cannonId] < 0 && yHitbox[cannonId] < 0) {
+        angle += 180;
+      } else if (xHitbox[cannonId] >= 0 && yHitbox[cannonId] < 0) {
+        angle += 90;
+      } else {
+        angle += 0;
+      }
+      
+      return new double[]{xCenter + (dist * Math.cos(radians((float)angle))), yCenter + (dist * Math.sin(radians((float)angle)))};
+      //fill(0, 255, 0, 50);
+      //ellipse((float)(double)realXVertexes.get(v), (float)(double)realYVertexes.get(v), 10, 10);
     }
 
     public boolean detectCollision(Sprite cmpSprite, boolean graze) {
