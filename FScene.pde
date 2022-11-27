@@ -101,8 +101,8 @@ class Game extends Scene {
     private boolean up, down, left, right, shoot, shift, enter;
     private boolean died;
     private boolean touhouMode;
-    private ArrayList<BasicBullet> bulletList = new ArrayList<BasicBullet>();
-    private ArrayList<BasicAsteroid> asteroidList = new ArrayList<BasicAsteroid>();
+    private ArrayList<BasicBullet> bulletList = new ArrayList<BasicBullet>(); //I know you should initialize in the constructor but that breaks processing.js for no reason
+    private ArrayList<BasicAsteroid> asteroidList = new ArrayList<BasicAsteroid>(); //^
     private BasicShip ship;
     private BasicEnemy enem;
     private Button restartButton;

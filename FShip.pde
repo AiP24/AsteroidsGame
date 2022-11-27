@@ -107,14 +107,17 @@ class BasicShip extends Sprite {
             //fill(0, 255, 0, 50);
             //ellipse((float)(double)realXVertexes.get(v), (float)(double)realYVertexes.get(v), 10, 10);
         }
+        int[] cmpBBox = cmpSprite.getBBox();
+        double cX = cmpSprite.getX();
+        double cY = cmpSprite.getY();
         double minX = (double)arrayMin(realXVertexes)-((boundingBox[2]-boundingBox[0])*.2);
         double minY = (double)arrayMin(realYVertexes)-((boundingBox[3]-boundingBox[1])*.2);
         double maxX = (double)arrayMax(realXVertexes)+((boundingBox[2]-boundingBox[0])*.2);
         double maxY = (double)arrayMax(realYVertexes)+((boundingBox[3]-boundingBox[1])*.2);
-        double cmpX = cmpSprite.boundingBox[0]+cmpSprite.xCenter;
-        double cmpY = cmpSprite.boundingBox[1]+cmpSprite.yCenter;
-        double cmpH = cmpSprite.boundingBox[2]-cmpSprite.boundingBox[0];
-        double cmpW = cmpSprite.boundingBox[3]-cmpSprite.boundingBox[1];
+        double cmpX = cmpBBox[0]+cX;
+        double cmpY = cmpBBox[1]+cY;
+        double cmpH = cmpBBox[2]-cmpBBox[0];
+        double cmpW = cmpBBox[3]-cmpBBox[1];
         //System.out.println(minX + " " + minY + " " + maxX + " " + maxY);
         fill(0, 255, 0, 50);
         rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));

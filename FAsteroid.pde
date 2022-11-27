@@ -61,12 +61,12 @@ class HomingAsteroid extends BasicAsteroid {
     }
     public void move() {
         turn(rotationVelocity);
-        if (target.xCenter > xCenter) {
+        if (target.getX() > xCenter) {
             xVelocity = Math.abs(speed/(Math.sqrt(2)));
         } else {
             xVelocity = -Math.abs(speed/(Math.sqrt(2)));
         }
-        if (target.yCenter < yCenter) {
+        if (target.getY() < yCenter) {
             yVelocity = -Math.abs(speed/(Math.sqrt(2)));
         } else {
             yVelocity = Math.abs(speed/(Math.sqrt(2)));

@@ -1,5 +1,5 @@
 class BasicBullet extends Sprite {
-    protected double dmg;
+    protected double dmg; //I plan to extend this later
     public BasicBullet(int xCenter, int yCenter, int w, int h, float[] rXHitbox, float[] rYHitbox, int[] spriteColor, double direction, double dmg) {
         if (spriteColor.length != 3) {
             throw new IllegalArgumentException("spriteColor requires an array of length 3");
@@ -25,14 +25,17 @@ class BasicBullet extends Sprite {
         return xCenter < 0 || yCenter < 0 || xCenter > width || yCenter > height;
     }
     public boolean detectCollision(Sprite cmpSprite) {
+        int[] cmpBBox = cmpSprite.getBBox();
+        double cX = cmpSprite.getX();
+        double cY = cmpSprite.getY();
         double minX = boundingBox[0]+xCenter;
         double maxX = boundingBox[2]+xCenter;
         double minY = boundingBox[1]+yCenter;
         double maxY = boundingBox[3]+yCenter;
-        double cmpX = cmpSprite.boundingBox[0]+cmpSprite.xCenter;
-        double cmpY = cmpSprite.boundingBox[1]+cmpSprite.yCenter;
-        double cmpH = cmpSprite.boundingBox[2]-cmpSprite.boundingBox[0];
-        double cmpW = cmpSprite.boundingBox[3]-cmpSprite.boundingBox[1];
+        double cmpX = cmpBBox[0]+cX;
+        double cmpY = cmpBBox[1]+cY;
+        double cmpH = cmpBBox[2]-cmpBBox[0];
+        double cmpW = cmpBBox[3]-cmpBBox[1];
         return (minX < cmpX + cmpW &&
                 cmpX < maxX &&
                 minY < cmpY + cmpH &&

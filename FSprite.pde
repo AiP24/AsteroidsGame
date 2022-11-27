@@ -1,4 +1,4 @@
-//I didn't like the base class so I kind of had to modify it slightly
+//I didn't like the original floater class so I kind of had to modify it slightly
 class Sprite {
     protected int[] boundingBox; //xy1 (top left), xy2 (bottom right)
     protected int[] xHitbox, yHitbox;
@@ -7,6 +7,10 @@ class Sprite {
     protected double direction;
     protected int[] spriteColor; //more complex sprites may need more colors
     protected int[] baseColor; //unused?
+    
+    public int[] getBBox(){return boundingBox;}
+    public double getX(){return xCenter;}
+    public double getY(){return yCenter;}
 
     public void accelerate(double amount) {
         //convert the current direction the floater is pointing to radians
