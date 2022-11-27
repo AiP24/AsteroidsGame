@@ -12,37 +12,37 @@ class Sprite {
         //convert the current direction the floater is pointing to radians
         double rads = direction * (Math.PI / 180);
         //change coordinates of direction of travel
-        if (Math.abs(xVelocity) < 100)
-            xVelocity += ((amount) * Math.cos(rads));
+        if (Math.abs(xVelocity) < 100) 
+          xVelocity += ((amount) * Math.cos(rads));
         if (Math.abs(yVelocity) < 100)
-            yVelocity += ((amount) * Math.sin(rads));
+          yVelocity += ((amount) * Math.sin(rads));
     }
 
     public void turn(double rotationAmount) {
         direction += rotationAmount;
         direction = direction % 360.0;
         if (direction < 0) {
-            direction = direction+360;
+          direction = direction+360;
         }
     }
 
     public void move() {
-        xCenter += xVelocity;
-        yCenter += yVelocity;
+        xCenter += xVelocity;    
+        yCenter += yVelocity;     
+        
+        //wrap around screen    
+        if (xCenter > width) {   
+            xCenter = 0;    
+        }   
+        else if (xCenter < 0) {   
+            xCenter = width;    
+        }
 
-        //wrap around screen
-        if (xCenter > width) {
-            xCenter = 0;
+        if (yCenter > height) {   
+            yCenter = 0;    
         }
-        else if (xCenter < 0) {
-            xCenter = width;
-        }
-
-        if (yCenter > height) {
-            yCenter = 0;
-        }
-        else if (yCenter < 0) {
-            yCenter = height;
+        else if (yCenter < 0) {   
+            yCenter = height;    
         }
     }
 
