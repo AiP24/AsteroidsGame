@@ -125,8 +125,8 @@ class BasicShip extends Sprite {
         double cmpH = cmpBBox[2]-cmpBBox[0];
         double cmpW = cmpBBox[3]-cmpBBox[1];
         //System.out.println(minX + " " + minY + " " + maxX + " " + maxY);
-        fill(0, 255, 0, 50);
-        rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
+        //fill(0, 255, 0, 50);
+        //rect((float)minX, (float)minY, (float)(maxX-minX), (float)(maxY-minY));
         if (
             minX < cmpX + cmpW &&
             cmpX < maxX &&
@@ -149,13 +149,13 @@ class BasicShip extends Sprite {
 }
 
 class ImageShip extends BasicShip {
-    private PImage[] spriteImage;
+    private PImage[] spriteImage; //arrays break in processing.js
     private int animCount;
     public ImageShip(int xCenter, int yCenter, int w, int h, float[] rXHitbox, float[] rYHitbox, String spriteImage, int animCount, int cannonId) {
         super(xCenter, yCenter, w, h, rXHitbox, rYHitbox, new int[] {0, 0, 0}, cannonId);
         this.spriteImage = new PImage[animCount];
         for (int i=0; i<animCount; i++) {
-            this.spriteImage[i] = loadImage(spriteImage+"_"+i+".png");
+            this.spriteImage[i]=loadImage(spriteImage+"_"+i+".png");
             this.spriteImage[i].resize(0, h);
         }
         this.animCount = animCount;
@@ -167,7 +167,8 @@ class ImageShip extends BasicShip {
         translate((float) xCenter, (float) yCenter);
         rotate(radians((float)direction+90));
         //BROKEN IN PJS
-        image(spriteImage[frameCount/7%animCount], spriteImage[frameCount/7%animCount].width/-2, spriteImage[frameCount/7%animCount].height/-2);
+        PImage img = spriteImage[frameCount/7%animCount];//spriteImage.get(frameCount/7%animCount);
+        image(img, img.width/-2, img.height/-2);
         popMatrix();
     }
 }

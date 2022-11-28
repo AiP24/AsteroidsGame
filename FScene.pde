@@ -64,7 +64,7 @@ class MainMenu extends Scene {
         title = "Asteroids:\n" + titleList[(int)(Math.random()*titleList.length)];
         splash = splashList[(int)(Math.random()*splashList.length)];
         startButton = new Button(width/2, (int)(height*.6), height/12, "Start", new int[] {255, 255, 255}, new int[] {90, 215, 255});
-        touhouButton = new Button(width/2, (int)(height*.8), height/12, "Touhou Mode", new int[] {255, 255, 255}, new int[] {90, 215, 255});
+        touhouButton = new Button(width/2, (int)(height*.8), height/12, "(BROKEN ON WEB) Touhou Mode", new int[] {255, 255, 255}, new int[] {90, 215, 255});
         splashText = new Popup(width/2, (int)(height*.9), height/24, splash, new int[] {255,255,255}, 3000, 1000);
     }
     public void draw() {
