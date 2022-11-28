@@ -126,10 +126,10 @@ class Game extends Scene {
         int[] s1c = {255, 100, 100};
         if (touhouMode) {
             ship = new ImageShip(250, 400, 50, 50, s1x, s1y, "reimu", 5, 0);
-            enem = new BasicEnemy(250, 100, 50, 50, new float[] {0f, 1f, -1f}, new float[] {-1f, 1f, 1f}, new int[] {150, 239, 255}, 500);
+            enem = new BasicEnemy(width/2, 100, 50, 50, new float[] {0f, 1f, -1f}, new float[] {-1f, 1f, 1f}, new int[] {150, 239, 255}, 500);
         } else {
             ship = new BasicShip(250, 400, 50, 50, s1x, s1y, s1c, 0);
-            enem = new BasicEnemy(250, 100, 50, 50, new float[] {0f, 1f, -1f}, new float[] {-1f, 1f, 1f}, new int[] {150, 239, 255}, 500);
+            enem = new BasicEnemy(width/2, 100, 50, 50, new float[] {0f, 1f, -1f}, new float[] {-1f, 1f, 1f}, new int[] {150, 239, 255}, 500);
         }
         enem.turn(90);
         restartButton = new Button(width/2, height/2, height/15, "Restart (Enter)", new int[] {255, 255, 255}, new int[] {90, 215, 255});
@@ -140,6 +140,8 @@ class Game extends Scene {
         if (!died) {
             backgroundParticles.update();
             enem.tickAttack();
+            if (enter) {
+            }
             if (up && shift) {
                 ship.yStrafe(-.02);
             } else if (down && shift) {
@@ -160,7 +162,7 @@ class Game extends Scene {
             }
             if (shoot && globalTimer.timerDone("shotCooldown")) {
                 double[] sc = ship.getCannon();
-                BasicBullet b = new BasicBullet((int)(sc[0]), (int)(sc[1]), 50, 2, new float[] {-1, -1, 1, 1, -1}, new float[] {-1,1,1,-1, -1}, new int[] {250,255,255}, ship.direction, 10);
+                BasicBullet b = new BasicBullet((int)(sc[0]), (int)(sc[1]), 25, 2, new float[] {-1, -1, 1, 1, -1}, new float[] {-1,1,1,-1, -1}, new int[] {250,255,255}, ship.direction, 10);
                 b.accelerate(15);
                 bulletList.add(b);
                 globalTimer.addTimer("shotCooldown", 150);
@@ -279,8 +281,16 @@ class Game extends Scene {
         case ENTER:
         case RETURN:
         case '\\':
+            if (pressed) {
+                enem.resetAttack();
+                bulletList = new ArrayList<BasicBullet>();
+                asteroidList = new ArrayList<BasicAsteroid>();
+                ship.hyperspace();
+                while(ship.detectCollision(enem, true) || ship.detectCollision(enem, false)) {
+                    ship.hyperspace();
+                }
+            }
             enter = pressed;
-            ship.stop();
             break;
         case SHIFT:
             shift = pressed;

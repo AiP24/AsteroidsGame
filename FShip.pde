@@ -31,6 +31,13 @@ class BasicShip extends Sprite {
         xVelocity = 0;
         yVelocity = 0;
     }
+    
+    public void hyperspace() {
+        stop();
+        direction = 360*Math.random();
+        xCenter = width*Math.random();
+        yCenter = height*Math.random();
+    }
 
     public void xStrafe(double amount) {
         xVelocity += amount;
@@ -80,7 +87,6 @@ class BasicShip extends Sprite {
         //fill(0, 255, 0, 50);
         //ellipse((float)(double)realXVertexes.get(v), (float)(double)realYVertexes.get(v), 10, 10);
     }
-
     public boolean detectCollision(Sprite cmpSprite, boolean graze) {
         List<Double> realXVertexes = new ArrayList<Double>();
         List<Double> realYVertexes = new ArrayList<Double>();

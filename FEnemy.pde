@@ -28,6 +28,10 @@ class BasicEnemy extends Sprite {
     public double getHitpoints() {
         return hitpoints;
     }
+    public void resetAttack() {
+        phase = 0;
+        subphase = 0;
+    }
     public void tickAttack() {
         if (!globalTimer.timerDone(this.staticHash)) {
             return;
