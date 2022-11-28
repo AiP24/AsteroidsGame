@@ -167,8 +167,7 @@ class ImageShip extends BasicShip {
         translate((float) xCenter, (float) yCenter);
         rotate(radians((float)direction+90));
         //BROKEN IN PJS
-        PImage im = spriteImage[frameCount/7%animCount];
-        image(im, im.width/-2, im.height/-2);
+        image(spriteImage[frameCount/7%animCount], spriteImage[frameCount/7%animCount].width/-2, spriteImage[frameCount/7%animCount].height/-2);
         popMatrix();
     }
 }
