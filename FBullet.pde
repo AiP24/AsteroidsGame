@@ -20,9 +20,17 @@ class BasicBullet extends Sprite {
     public void move() {
         xCenter += xVelocity;
         yCenter += yVelocity;
+        
+        if (xCenter > width) {
+            xCenter = 0;
+        }
+        else if (xCenter < 0) {
+            xCenter = width;
+        }
     }
     public boolean isOutOfBounds() {
-        return xCenter < 0 || yCenter < 0 || xCenter > width || yCenter > height;
+        //return xCenter < 0 || yCenter < 0 || xCenter > width || yCenter > height;
+        return yCenter < 0 || yCenter > height;
     }
     public boolean detectCollision(Sprite cmpSprite) {
         int[] cmpBBox = cmpSprite.getBBox();

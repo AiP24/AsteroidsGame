@@ -11,7 +11,9 @@ class Sprite {
     public int[] getBBox(){return boundingBox;}
     public double getX(){return xCenter;}
     public double getY(){return yCenter;}
-
+    
+    public double getDirection() {return direction;}
+    
     public void accelerate(double amount) {
         //convert the current direction the floater is pointing to radians
         double rads = direction * (Math.PI / 180);

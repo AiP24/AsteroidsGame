@@ -4,7 +4,7 @@ Timer globalTimer;
 String test = "beans";
 int uiScale;
 public void setup() {
-    size(1000, 500);
+    size(750, 500);
     uiScale = (width+height)/2;
     globalTimer = new Timer();
     scene = new MainMenu();

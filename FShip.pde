@@ -66,7 +66,7 @@ class BasicShip extends Sprite {
     }
 
     public double[] getCannon() {
-        double dist = Math.sqrt(Math.pow(xHitbox[cannonId], 2)+Math.pow(yHitbox[cannonId], 2));
+        double dist = Math.sqrt(Math.pow(xHitbox[cannonId], 2)+Math.pow(yHitbox[cannonId], 2))+20;
         double angle;
         try {
             angle = direction+degrees((float)Math.atan((double)(yHitbox[cannonId])/(double)(xHitbox[cannonId])));
